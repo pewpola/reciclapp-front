@@ -1,5 +1,6 @@
 import logo from '../../assets/logo.png';
 import { Link } from 'react-router-dom';
+import { Dropdown, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Header() {
@@ -11,23 +12,26 @@ export default function Header() {
                 <nav>
                     <ul>
                         <li><Link to="/">Home</Link></li>
-                        <li><Link to="/vender">Vender</Link></li>
+                        <li><Link to="/sell">Vender</Link></li>
                         <li><Link to="/inventary">Meus Móveis</Link></li>
                         <li><Link to="/contato">Contato</Link></li>
                         <li><Link to="/sobre-nos">Sobre Nós</Link></li>
                     </ul>
                 </nav>
-                <div className="dropdown">
-                    <button className="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+
+                {/* Dropdown com React-Bootstrap */}
+                <Dropdown align="end">
+                    <Dropdown.Toggle variant="light" id="userDropdown">
                         <i className="bi bi-person-circle"></i>
-                    </button>
-                    <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li><Link className="dropdown-item" to="/login">Login</Link></li>
-                        <li><Link className="dropdown-item" to="/cadastro">Criar Conta</Link></li>
-                        <li><Link className="dropdown-item" to="/carrinho">Carrinho</Link></li>
-                    </ul>
-                </div>
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                        <Dropdown.Item as={Link} to="/login">Login</Dropdown.Item>
+                        <Dropdown.Item as={Link} to="/cadastro">Criar Conta</Dropdown.Item>
+                        <Dropdown.Item as={Link} to="/carrinho">Carrinho</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
             </div>
         </header>
     );
-};
+}
