@@ -5,6 +5,7 @@ import Inventary from './pages/inventary';
 import Detail from './pages/detail';
 import Sell from './pages/sell';
 import Login from './pages/login';
+import Register from './pages/register';
 
 export default function App(){
   return (
@@ -15,6 +16,7 @@ export default function App(){
         <Route path='/detail' element={<Detail/>} />
         <Route path='/sell' element={<Sell/>} />
         <Route path='/login' element={<Login/>} />
+        <Route path='/register' element={<Register/>} />
       </Routes>
     </Router>
   );

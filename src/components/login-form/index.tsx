@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function LoginForm() {
     const [form, setForm] = useState({ email: '', password: '' });
@@ -18,7 +19,7 @@ function LoginForm() {
                 <button type="submit" className="btn btn-primary">Entrar</button>
             </div>
             <p className="mt-3 text-center">
-                Não tem uma conta? <a href="/cadastro">Cadastre-se</a>
+                Não tem uma conta? <Link to={'/register'}>Cadastre-se</Link>
             </p>
         </form>
     );

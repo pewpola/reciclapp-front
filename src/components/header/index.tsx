@@ -1,6 +1,6 @@
 import logo from '../../assets/logo.png';
 import { Link } from 'react-router-dom';
-import { Dropdown, Nav } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Header() {
@@ -19,7 +19,6 @@ export default function Header() {
                     </ul>
                 </nav>
 
-                {/* Dropdown com React-Bootstrap */}
                 <Dropdown align="end">
                     <Dropdown.Toggle variant="light" id="userDropdown">
                         <i className="bi bi-person-circle"></i>
@@ -27,7 +26,7 @@ export default function Header() {
 
                     <Dropdown.Menu>
                         <Dropdown.Item as={Link} to="/login">Login</Dropdown.Item>
-                        <Dropdown.Item as={Link} to="/cadastro">Criar Conta</Dropdown.Item>
+                        <Dropdown.Item as={Link} to="/register">Criar Conta</Dropdown.Item>
                         <Dropdown.Item as={Link} to="/carrinho">Carrinho</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
