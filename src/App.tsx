@@ -6,6 +6,7 @@ import Detail from './pages/detail';
 import Sell from './pages/sell';
 import Login from './pages/login';
 import Register from './pages/register';
+import Info from './pages/info';
 
 export default function App(){
   return (
@@ -17,6 +18,7 @@ export default function App(){
         <Route path='/sell' element={<Sell/>} />
         <Route path='/login' element={<Login/>} />
         <Route path='/register' element={<Register/>} />
+        <Route path='/info' element={<Info/>} />
       </Routes>
     </Router>
   );

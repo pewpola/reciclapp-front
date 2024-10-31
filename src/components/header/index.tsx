@@ -15,7 +15,7 @@ export default function Header() {
                         <li><Link to="/sell">Vender</Link></li>
                         <li><Link to="/inventary">Meus Móveis</Link></li>
                         <li><Link to="/contato">Contato</Link></li>
-                        <li><Link to="/sobre-nos">Sobre Nós</Link></li>
+                        <li><Link to="/info">Sobre Nós</Link></li>
                     </ul>
                 </nav>
 
