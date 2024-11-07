@@ -46,7 +46,7 @@ export default function RegisterForm() {
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem('token', data.token);
-                navigate('/dashboard');
+                navigate('/login');
             } else {
                 const errorData = await response.json();
                 setError(errorData.error || 'Erro ao cadastrar');
