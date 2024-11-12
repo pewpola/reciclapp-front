@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { register } from '../../services/authService';
 
 export default function RegisterForm() {
     const navigate = useNavigate();
@@ -29,30 +30,22 @@ export default function RegisterForm() {
         }
 
         try {
-            const response = await fetch('http://localhost:3000/auth/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    nome: formData.nome,
-                    email: formData.email,
-                    senha: formData.senha,
-                    cep: formData.cep,
-                    rua: formData.rua,
-                    numero: parseInt(formData.numero),
-                    telefone: formData.telefone
-                })
+            // Usando o serviço de registro
+            const token = await register({
+                nome: formData.nome,
+                email: formData.email,
+                senha: formData.senha,
+                cep: formData.cep,
+                rua: formData.rua,
+                numero: parseInt(formData.numero),
+                telefone: formData.telefone
             });
 
-            if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem('token', data.token);
-                navigate('/login');
-            } else {
-                const errorData = await response.json();
-                setError(errorData.error || 'Erro ao cadastrar');
+            if (token) {
+                navigate('/login'); // Redireciona para a página de login após o registro bem-sucedido
             }
-        } catch (error) {
-            setError('Erro ao conectar com o servidor');
+        } catch (error: any) {
+            setError(error.message || 'Erro ao cadastrar');
         }
     };
 

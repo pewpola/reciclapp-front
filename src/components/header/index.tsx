@@ -28,6 +28,7 @@ export default function Header() {
                         <Dropdown.Item as={Link} to="/login">Login</Dropdown.Item>
                         <Dropdown.Item as={Link} to="/register">Criar Conta</Dropdown.Item>
                         <Dropdown.Item as={Link} to="/carrinho">Carrinho</Dropdown.Item>
+                        <Dropdown.Item as={Link} to="/profile">Perfil</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
             </div>
