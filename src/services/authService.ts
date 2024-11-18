@@ -201,22 +201,18 @@ export const deleteMovel = async (id: number) => {
     const response = await fetch(`${API_URL}/moveis/${id}`, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.error || 'Erro ao deletar móvel');
+      throw new Error(errorData.error || 'Erro ao excluir o móvel');
     }
-
-    return await response.json();
   } catch (error: any) {
     throw new Error(error.message || 'Erro ao conectar com o servidor');
   }
 };
-
 
 export const logout = () => {
   localStorage.removeItem('token');
