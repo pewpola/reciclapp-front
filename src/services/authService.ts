@@ -171,26 +171,13 @@ export const addMovel = async (movelData: any) => {
   if (!token) throw new Error('Usuário não autenticado');
 
   try {
-    const formData = new FormData();
-    formData.append('nome', movelData.nome);
-    formData.append('descricao', movelData.descricao);
-
-    // Aqui garantimos que o preço seja um número com duas casas decimais
-    const precoFormatado = parseFloat(movelData.preco).toFixed(2).replace(',', '.');
-    formData.append('preco', precoFormatado);
-
-    formData.append('estado', movelData.estado);
-
-    if (movelData.imagem) {
-      formData.append('imagem', movelData.imagem);
-    }
-
     const response = await fetch(`${API_URL}/moveis`, {
       method: 'POST',
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: formData,
+      body: JSON.stringify(movelData),
     });
 
     if (!response.ok) {
@@ -203,6 +190,7 @@ export const addMovel = async (movelData: any) => {
     throw new Error(error.message || 'Erro ao conectar com o servidor');
   }
 };
+
 
 export const deleteMovel = async (id: number) => {
   const token = getToken();
