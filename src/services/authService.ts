@@ -93,7 +93,7 @@ export const getMovelByUser = async () => {
     console.log('Resposta da API:', data);
 
     return data.map((item: any) => ({
-      id: item.id,
+      id: item.idMovel,
       name: item.nome,
       price: item.preco,
       imgSrc: item.urlImagem,
@@ -102,6 +102,133 @@ export const getMovelByUser = async () => {
     throw new Error(error.message || 'Erro ao conectar com o servidor');
   }
 };
+
+export const getMovelById = async (id: number) => {
+  if (isNaN(id)) {
+    throw new Error('ID inválido fornecido para a busca de móvel');
+  }
+
+  const token = getToken();
+  if (!token) throw new Error('Usuário não autenticado');
+
+  try {
+    const response = await fetch(`${API_URL}/moveis/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Erro ao buscar móvel por ID');
+    }
+
+    const data = await response.json();
+    return {
+      id: data.idMovel,
+      nome: data.nome,
+      preco: data.preco,
+      estado: data.estado,
+      descricao: data.descricao,
+      urlImagem: data.urlImagem,
+    };
+  } catch (error: any) {
+    throw new Error(error.message || 'Erro ao conectar com o servidor');
+  }
+};
+
+export const updateMovel = async (id: number, updatedData: any) => {
+  const token = getToken();
+
+  if (!token) throw new Error('Usuário não autenticado');
+
+  try {
+    const response = await fetch(`${API_URL}/moveis/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updatedData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Erro ao atualizar móvel');
+    }
+
+    return await response.json();
+  } catch (error: any) {
+    throw new Error(error.message || 'Erro ao conectar com o servidor');
+  }
+};
+
+export const addMovel = async (movelData: any) => {
+  const token = getToken();
+
+  if (!token) throw new Error('Usuário não autenticado');
+
+  try {
+    const formData = new FormData();
+    formData.append('nome', movelData.nome);
+    formData.append('descricao', movelData.descricao);
+
+    // Aqui garantimos que o preço seja um número com duas casas decimais
+    const precoFormatado = parseFloat(movelData.preco).toFixed(2).replace(',', '.');
+    formData.append('preco', precoFormatado);
+
+    formData.append('estado', movelData.estado);
+
+    if (movelData.imagem) {
+      formData.append('imagem', movelData.imagem);
+    }
+
+    const response = await fetch(`${API_URL}/moveis`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Erro ao adicionar móvel');
+    }
+
+    return await response.json();
+  } catch (error: any) {
+    throw new Error(error.message || 'Erro ao conectar com o servidor');
+  }
+};
+
+export const deleteMovel = async (id: number) => {
+  const token = getToken();
+
+  if (!token) throw new Error('Usuário não autenticado');
+
+  try {
+    const response = await fetch(`${API_URL}/moveis/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Erro ao deletar móvel');
+    }
+
+    return await response.json();
+  } catch (error: any) {
+    throw new Error(error.message || 'Erro ao conectar com o servidor');
+  }
+};
+
 
 export const logout = () => {
   localStorage.removeItem('token');

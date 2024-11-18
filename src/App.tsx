@@ -8,6 +8,7 @@ import Login from './pages/login';
 import Register from './pages/register';
 import Info from './pages/info';
 import Profile from './pages/profile';
+import EditMovel from './pages/edit-movel';
 
 export default function App(){
   return (
@@ -21,6 +22,7 @@ export default function App(){
           <Route path='/register' element={<Register/>} />
           <Route path='/info' element={<Info/>} />
           <Route path='/profile' element={<Profile/>} />
+          <Route path='/edit-movel/:id' element={<EditMovel/>} />
         </Routes>
       </Router>
   );
