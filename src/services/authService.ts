@@ -69,6 +69,33 @@ export const getProfile = async () => {
   }
 };
 
+export const getAllMoveis = async () => {
+  try {
+    const response = await fetch(`${API_URL}/moveis`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Erro ao buscar todos os móveis');
+    }
+
+    const data = await response.json();
+
+    return data.map((item: any) => ({
+      id: item.idMovel,
+      name: item.nome,
+      price: item.preco,
+      imgSrc: item.urlImagem,
+    }));
+  } catch (error: any) {
+    throw new Error(error.message || 'Erro ao conectar com o servidor');
+  }
+};
+
 export const getMovelByUser = async () => {
   const token = getToken();
 
