@@ -2,14 +2,14 @@
   --cor-principal: #0f600f;
 }
 
-/* Estilos Gerais */
 body {
   font-family: 'Arial', sans-serif;
   background-color: #f9f9f9;
   color: #333;
+  margin: 0;
+  padding-bottom: 60px;
 }
 
-/* Cabeçalho */
 header {
   background-color: var(--cor-principal);
   color: #fff;
@@ -55,7 +55,6 @@ header nav ul li a:hover {
   text-decoration: underline;
 }
 
-/* Ícone de usuário */
 .dropdown {
   display: flex;
   align-items: center;
@@ -67,8 +66,6 @@ header nav ul li a:hover {
   justify-content: center;
 }
 
-
-/* Seções */
 section {
   padding: 60px 0;
 }
@@ -87,7 +84,6 @@ h2 {
   border-radius: 8px;
 }
 
-/* Componentes - Geral*/
 .componentes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -133,49 +129,6 @@ h2 {
   background-color: #45a049;
 }
 
-/* Meus Móveis */
-.moveis-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-}
-
-.componente-movel {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  text-align: center;
-}
-
-.componente-movel img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  height: 200px;
-  width: 600px;
-}
-
-.componente-movel h3 {
-  margin-top: 15px;
-  color: var(--cor-principal);
-}
-
-.componente-movel p {
-  font-size: 1.1rem;
-  margin: 10px 0;
-}
-
-.componente-movel button {
-  color: #000;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-
-/* Formulários */
 form {
   max-width: 600px;
   margin: 0 auto;
@@ -189,13 +142,16 @@ form label {
   color: var(--cor-principal);
 }
 
-form input, form textarea, form button {
+form input,
+form textarea,
+form button {
   width: 100%;
   margin-bottom: 15px;
   padding: 10px;
 }
 
-form input, form textarea {
+form input,
+form textarea {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
@@ -213,40 +169,16 @@ form button:hover {
   background-color: #45a049;
 }
 
-/* Seção de Contato */
-#contato form textarea {
-  resize: vertical;
-}
-
-/* Botão de rolagem*/
-#scrollToTopBtn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  display: none;
-  z-index: 99;
-  font-size: 18px;
-  border: none;
-  outline: none;
-  background-color: #0d6efd;
-  color: #fff;
-  cursor: pointer;
-  padding: 10px;
-  border-radius: 50%;
-  transition: background-color 0.3s;
-}
-
-#scrollToTopBtn:hover {
-  background-color: #0056b3;
-}
-
-/* Rodapé */
 footer {
   background-color: var(--cor-principal);
   color: #fff;
   text-align: center;
   padding: 15px 0;
-  margin-top: 40px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
 footer p {

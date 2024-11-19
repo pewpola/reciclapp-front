@@ -10,7 +10,6 @@ export default function ProductCard({ name, price, imgSrc }: ProductCardProps) {
             <img src={imgSrc} alt={name} style={{ width: '100%', height: 'auto' }} />
             <h3>{name}</h3>
             <p>Preço: {price}</p>
-            <a href="/produto"><button className="btn btn-primary">Comprar</button></a>
         </div>
     );
 }
