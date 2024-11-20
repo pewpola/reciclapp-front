@@ -5,7 +5,6 @@ import Footer from '../../components/footer';
 import ProductImage from '../../components/product-image';
 import ProductInfo from '../../components/product-info';
 import { getMovelById } from '../../services/authService';
-import { addItemToCarrinho } from '../../services/carrinhoService';
 
 interface Movel {
   id: number;
@@ -42,18 +41,6 @@ export default function Detail() {
     }
   };
 
-  const handleAddToCart = async () => {
-    try {
-      if (product) {
-        await addItemToCarrinho(product.id, 1); // Adiciona 1 unidade
-        alert('Item adicionado ao carrinho!');
-        window.dispatchEvent(new Event('update-cart-count')); // Atualiza o cabeçalho
-      }
-    } catch (err) {
-      alert('Erro ao adicionar ao carrinho.');
-    }
-  };
-
   useEffect(() => {
     fetchMovelDetails();
   }, [id]);
@@ -72,17 +59,12 @@ export default function Detail() {
             <div className="row">
               <ProductImage src={product.imgSrc} alt={product.name} />
               <ProductInfo
+                id={product.id}
                 name={product.name}
                 price={product.price}
                 description={product.description}
                 condition={product.condition}
               />
-              <button
-                className="btn btn-success mt-4"
-                onClick={handleAddToCart}
-              >
-                Adicionar ao Carrinho
-              </button>
             </div>
           ) : (
             <p>Produto não encontrado.</p>

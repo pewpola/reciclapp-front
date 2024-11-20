@@ -28,7 +28,6 @@ export const getTotalItensCarrinho = async () => {
   
     const carrinho = await response.json();
   
-    // Soma a quantidade de itens no carrinho
     return carrinho.items.reduce((total: number, item: { quantidade: number }) => total + item.quantidade, 0);
 };
 
@@ -65,7 +64,7 @@ export const clearCarrinho = async (carrinhoId: number) => {
   const token = getToken();
   if (!token) throw new Error('Usuário não autenticado');
 
-  const response = await fetch(`${API_URL}/carrinho/${carrinhoId}/clear`, {
+  const response = await fetch(`${API_URL}/carrinho/clear/${carrinhoId}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` },
   });

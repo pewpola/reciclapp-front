@@ -12,22 +12,22 @@ export default function Carrinho() {
   const carregarCarrinho = async () => {
     const token = getToken();
     if (!token) {
-      alert("Usuário não autenticado");
+      alert('Usuário não autenticado');
       return;
     }
 
     try {
       const carrinho = await getCarrinho();
       setItens(carrinho.itens || []);
-      setCarrinhoId(carrinho.id || 0);
+      setCarrinhoId(carrinho.idCarrinho || 0);
 
       const total = carrinho.itens.reduce(
-        (acc: number, item: any) => acc + item.quantidade * parseFloat(item.movel.preco || "0"),
+        (acc: number, item: any) => acc + item.quantidade * parseFloat(item.movel.preco || '0'),
         0
       );
       setTotalItens(total);
     } catch (error) {
-      console.error("Erro ao carregar o carrinho:", error);
+      console.error('Erro ao carregar o carrinho:', error);
     }
   };
 
@@ -36,7 +36,7 @@ export default function Carrinho() {
       await addItemToCarrinho(movelId, quantidade);
       carregarCarrinho();
     } catch (error) {
-      console.error("Erro ao adicionar item ao carrinho:", error);
+      console.error('Erro ao adicionar item ao carrinho:', error);
     }
   };
 
@@ -45,7 +45,7 @@ export default function Carrinho() {
       await removeItemFromCarrinho(carrinhoId, itemId);
       carregarCarrinho();
     } catch (error) {
-      console.error("Erro ao remover item do carrinho:", error);
+      console.error('Erro ao remover item do carrinho:', error);
     }
   };
 
@@ -54,7 +54,7 @@ export default function Carrinho() {
       await clearCarrinho(carrinhoId);
       carregarCarrinho();
     } catch (error) {
-      console.error("Erro ao limpar o carrinho:", error);
+      console.error('Erro ao limpar o carrinho:', error);
     }
   };
 
@@ -93,7 +93,7 @@ export default function Carrinho() {
                           min="1"
                           className="form-control"
                           onChange={(e) =>
-                            adicionarItem(item.movel.id, parseInt(e.target.value, 10) || 1)
+                            adicionarItem(item.movel.idMovel, parseInt(e.target.value, 10) || 1)
                           }
                         />
                       </td>
@@ -105,7 +105,7 @@ export default function Carrinho() {
                       </td>
                       <td>
                         R${' '}
-                        {(item.quantidade * parseFloat(item.movel.preco || "0")).toFixed(2)}
+                        {(item.quantidade * parseFloat(item.movel.preco || '0')).toFixed(2)}
                       </td>
                       <td>
                         <button
@@ -125,7 +125,15 @@ export default function Carrinho() {
               <button className="btn btn-danger me-2" onClick={limparCarrinho}>
                 Limpar Carrinho
               </button>
-              <button className="btn btn-success">Finalizar Compra</button>
+              <button
+                className="btn btn-success"
+                onClick={() => {
+                  alert('Compra processada com sucesso!');
+                  limparCarrinho();
+                }}
+              >
+                Finalizar Compra
+              </button>
             </div>
           </div>
         )}
