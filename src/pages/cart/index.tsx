@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
 import Header from '../../components/header';
 import Footer from '../../components/footer';
-import { getCarrinho, addItemToCarrinho, removeItemFromCarrinho, clearCarrinho } from '../../services/carrinhoService';
+import {
+  getCarrinho,
+  addItemToCarrinho,
+  removeItemFromCarrinho,
+  clearCarrinho,
+} from '../../services/carrinhoService';
 import { getToken } from '../../services/authService';
 
 export default function Carrinho() {
@@ -31,14 +36,49 @@ export default function Carrinho() {
     }
   };
 
-  const adicionarItem = async (movelId: number, quantidade: number) => {
+  const incrementarItem = async (movelId: number) => {
     try {
-      await addItemToCarrinho(movelId, quantidade);
-      carregarCarrinho();
+      await addItemToCarrinho(movelId, 1);
+      setItens((prevItens) =>
+        prevItens.map((item) =>
+          item.movel.idMovel === movelId
+            ? { ...item, quantidade: item.quantidade + 1 }
+            : item
+        )
+      );
+      setTotalItens((prevTotal) =>
+        prevTotal +
+        parseFloat(itens.find((item) => item.movel.idMovel === movelId)?.movel.preco || '0')
+      );
     } catch (error) {
-      console.error('Erro ao adicionar item ao carrinho:', error);
+      console.error('Erro ao incrementar item no carrinho:', error);
     }
   };
+  
+  const decrementarItem = async (movelId: number, quantidadeAtual: number) => {
+    if (quantidadeAtual <= 1) {
+      alert('A quantidade mínima é 1.');
+      return;
+    }
+  
+    try {
+      await addItemToCarrinho(movelId, -1);
+      setItens((prevItens) =>
+        prevItens.map((item) =>
+          item.movel.idMovel === movelId
+            ? { ...item, quantidade: item.quantidade - 1 }
+            : item
+        )
+      );
+      setTotalItens((prevTotal) =>
+        prevTotal -
+        parseFloat(itens.find((item) => item.movel.idMovel === movelId)?.movel.preco || '0')
+      );
+    } catch (error) {
+      console.error('Erro ao decrementar item no carrinho:', error);
+    }
+  };
+  
 
   const removerItem = async (itemId: number) => {
     try {
@@ -87,15 +127,21 @@ export default function Carrinho() {
                     <tr key={index}>
                       <td>{item.movel.nome}</td>
                       <td>
-                        <input
-                          type="number"
-                          value={item.quantidade}
-                          min="1"
-                          className="form-control"
-                          onChange={(e) =>
-                            adicionarItem(item.movel.idMovel, parseInt(e.target.value, 10) || 1)
-                          }
-                        />
+                        <div className="d-flex align-items-center">
+                          <button
+                            className="btn btn-secondary btn-sm"
+                            onClick={() => decrementarItem(item.movel.idMovel, item.quantidade)}
+                          >
+                            -
+                          </button>
+                          <span className="mx-2">{item.quantidade}</span>
+                          <button
+                            className="btn btn-secondary btn-sm"
+                            onClick={() => incrementarItem(item.movel.idMovel)}
+                          >
+                            +
+                          </button>
+                        </div>
                       </td>
                       <td>
                         R${' '}

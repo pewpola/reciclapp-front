@@ -71,3 +71,35 @@ export const clearCarrinho = async (carrinhoId: number) => {
 
   if (!response.ok) throw new Error('Erro ao limpar carrinho');
 };
+
+export const incrementarQuantidadeItem = async (itemId: number) => {
+    const token = getToken();
+    if (!token) throw new Error('Usuário não autenticado');
+
+    const response = await fetch(`${API_URL}/carrinho/increment/item/${itemId}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    if (!response.ok) throw new Error('Erro ao incrementar quantidade do item');
+    return response.json();
+};
+
+export const decrementarQuantidadeItem = async (itemId: number) => {
+    const token = getToken();
+    if (!token) throw new Error('Usuário não autenticado');
+
+    const response = await fetch(`${API_URL}/carrinho/decrement/item/${itemId}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    if (!response.ok) throw new Error('Erro ao decrementar quantidade do item');
+    return response.json();
+};
