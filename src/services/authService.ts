@@ -241,6 +241,57 @@ export const deleteMovel = async (id: number) => {
   }
 };
 
+export const createServico = async (servicoData: any) => {
+  const token = getToken();
+
+  if (!token) throw new Error("Usuário não autenticado");
+
+  try {
+    const response = await fetch(`${API_URL}/servicos`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(servicoData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Erro ao criar serviço");
+    }
+
+    return await response.json();
+  } catch (error: any) {
+    throw new Error(error.message || "Erro ao conectar com o servidor");
+  }
+};
+
+export const listServicos = async () => {
+  const token = getToken();
+
+  if (!token) throw new Error("Usuário não autenticado");
+
+  try {
+    const response = await fetch(`${API_URL}/servicos`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Erro ao listar serviços");
+    }
+
+    return await response.json();
+  } catch (error: any) {
+    throw new Error(error.message || "Erro ao conectar com o servidor");
+  }
+};
+
 export const logout = () => {
   localStorage.removeItem('token');
 };

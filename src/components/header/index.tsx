@@ -17,7 +17,7 @@ export default function Header() {
                         <li><Link to="/">Home</Link></li>
                         <li><Link to="/sell">Vender</Link></li>
                         <li><Link to="/inventary">Meus Móveis</Link></li>
-                        <li><Link to="/contato">Contato</Link></li>
+                        <li><Link to="/collect">Serviço de Coleta</Link></li>
                         <li><Link to="/info">Sobre Nós</Link></li>
                     </ul>
                 </nav>
@@ -49,6 +49,7 @@ export default function Header() {
                             <Dropdown.Item as={Link} to="/login">Login</Dropdown.Item>
                             <Dropdown.Item as={Link} to="/register">Criar Conta</Dropdown.Item>
                             <Dropdown.Item as={Link} to="/profile">Perfil</Dropdown.Item>
+                            <Dropdown.Item as={Link} to="/collect-list">Solicitações de Coleta</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                 </div>
