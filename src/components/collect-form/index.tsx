@@ -24,7 +24,7 @@ function CollectForm() {
     try {
       await createServico(form);
       alert("Solicitação de coleta emitida com sucesso!");
-      navigate("/coletas"); // Navegue para a página de listagem, se necessário
+      navigate("/collect-list");
     } catch (err: any) {
       setError(err.message || "Erro ao emitir solicitação de coleta");
     }
