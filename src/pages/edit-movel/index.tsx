@@ -1,162 +1,167 @@
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import { getMovelById, updateMovel } from '../../services/authService';
 import Header from '../../components/header';
 import Footer from '../../components/footer';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
-interface Movel {
-  id?: number;
-  nome: string;
-  preco: string;
-  descricao: string;
-  estado: string;
-  urlImagem: string;
-}
-
-export default function EditMovel() {
-  const { id } = useParams();
+const EditMovel: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const [movel, setMovel] = useState<Movel>({
+  const [movel, setMovel] = useState<any>({
     nome: '',
     preco: '',
-    descricao: '',
     estado: '',
-    urlImagem: ''
+    descricao: '',
+    urlImagem: '',
   });
 
+  const [newImage, setNewImage] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchMovel = async () => {
-      if (id) {
-        try {
-          const data = await getMovelById(Number(id));
-          setMovel({
-            nome: data.nome || '',
-            preco: data.preco || '',
-            descricao: data.descricao || '',
-            estado: data.estado || '',
-            urlImagem: data.urlImagem || ''
-          });
-        } catch (error: any) {
-          setError('Erro ao buscar dados do móvel.');
-        }
+      try {
+        if (!id) return;
+        const data = await getMovelById(parseInt(id));
+        setMovel(data);
+      } catch (err: any) {
+        setError(err.message);
       }
     };
+
     fetchMovel();
   }, [id]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setMovel({ ...movel, [name]: value });
+    setMovel((prevState: any) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setSuccess(null);
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setNewImage(e.target.files[0]);
+    }
+  };
 
-    if (id) {
-      try {
-        await updateMovel(Number(id), movel);
-        setSuccess('Móvel atualizado com sucesso!');
-        setTimeout(() => navigate('/'), 2000);
-      } catch (error: any) {
-        setError('Erro ao atualizar móvel. Tente novamente.');
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append('nome', movel.nome);
+      formData.append('preco', movel.preco.toString());
+      formData.append('estado', movel.estado);
+      formData.append('descricao', movel.descricao);
+
+      if (newImage) {
+        formData.append('imagem', newImage);
       }
+
+      await updateMovel(parseInt(id!), formData);
+
+      navigate('/inventary');
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div>
-      <Header />
+      <Header/>
       <div className="container mt-5">
-        <h2 className="text-center">Editar Móvel</h2>
-        {success && <div className="alert alert-success text-center">{success}</div>}
-        {error && <div className="alert alert-danger text-center">{error}</div>}
-        <form onSubmit={handleSubmit} className="mt-4">
-          <div className="form-group mb-3">
-            <label>Nome</label>
+        <h1>Editar Móvel</h1>
+
+        {error && <div className="alert alert-danger">{error}</div>}
+
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
+          <div className="mb-3">
+            <label htmlFor="nome" className="form-label">Nome</label>
             <input
               type="text"
+              className="form-control"
+              id="nome"
               name="nome"
               value={movel.nome}
-              onChange={handleChange}
-              className="form-control"
-              placeholder="Digite o nome do móvel"
+              onChange={handleInputChange}
               required
             />
           </div>
 
-          <div className="form-group mb-3">
-            <label>Preço (R$)</label>
+          <div className="mb-3">
+            <label htmlFor="preco" className="form-label">Preço</label>
             <input
               type="number"
+              className="form-control"
+              id="preco"
               name="preco"
               value={movel.preco}
-              onChange={handleChange}
-              className="form-control"
-              placeholder="Digite o preço"
-              step="0.01"
+              onChange={handleInputChange}
               required
             />
           </div>
 
-          <div className="form-group mb-3">
-            <label>Descrição</label>
-            <textarea
-              name="descricao"
-              value={movel.descricao}
-              onChange={handleChange}
-              className="form-control"
-              placeholder="Digite a descrição"
-              rows={3}
-              required
-            />
-          </div>
-
-          {/* Campo para Estado */}
-          <div className="form-group mb-3">
-            <label>Estado</label>
+          <div className="mb-3">
+            <label htmlFor="estado" className="form-label">Estado</label>
             <input
               type="text"
+              className="form-control"
+              id="estado"
               name="estado"
               value={movel.estado}
-              onChange={handleChange}
-              className="form-control"
-              placeholder="Digite o estado (novo, usado, etc.)"
+              onChange={handleInputChange}
               required
             />
           </div>
 
-          {/* Campo para URL da Imagem */}
-          <div className="form-group mb-3">
-            <label>URL da Imagem</label>
-            <input
-              type="text"
-              name="urlImagem"
-              value={movel.urlImagem}
-              onChange={handleChange}
+          <div className="mb-3">
+            <label htmlFor="descricao" className="form-label">Descrição</label>
+            <textarea
               className="form-control"
-              placeholder="URL da imagem"
+              id="descricao"
+              name="descricao"
+              value={movel.descricao}
+              onChange={handleInputChange}
+              rows={4}
+              required
             />
           </div>
 
-          {/* Botões de Ação */}
-          <div className="text-center">
-            <button type="submit" className="btn btn-warning me-2">
-              Atualizar
-            </button>
-            <button type="button" className="btn btn-secondary" onClick={() => navigate('/')}>
-              Cancelar
-            </button>
+          <div className="mb-3">
+            <label htmlFor="imagemAtual" className="form-label">Imagem Atual</label>
+            <div>
+              <img src={movel.urlImagem} alt="Imagem do móvel" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+            </div>
           </div>
+
+          <div className="mb-3">
+            <label htmlFor="imagem" className="form-label">Nova Imagem (opcional)</label>
+            <input
+              type="file"
+              className="form-control"
+              id="imagem"
+              name="imagem"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+          </div>
+
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? 'Salvando...' : 'Salvar Alterações'}
+          </button>
         </form>
       </div>
-      <Footer />
+      <Footer/>
     </div>
   );
-}
+};
+
+export default EditMovel;

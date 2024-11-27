@@ -39,16 +39,14 @@ export default function Inventary() {
     if (confirmed) {
       try {
         await deleteMovel(id);
-        alert('Móvel excluído com sucesso!');        
+        alert('Móvel excluído com sucesso!');
         setFurnitureItems((prevItems) => prevItems.filter((item) => item.id !== id));
-        
       } catch (err: any) {
         setError(err.message || 'Erro ao excluir móvel.');
         alert('Erro ao excluir o móvel. Tente novamente.');
       }
     }
   };
-  
 
   return (
     <div>
@@ -91,7 +89,6 @@ export default function Inventary() {
               </div>
             ))
           ) : (
-            // Mensagem caso não haja móveis
             <p className="text-center mt-4">Nenhum móvel encontrado.</p>
           )}
         </div>

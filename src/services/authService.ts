@@ -89,7 +89,7 @@ export const getAllMoveis = async () => {
       id: item.idMovel,
       name: item.nome,
       price: item.preco,
-      imgSrc: item.urlImagem,
+      imgSrc: `${API_URL}/${item.urlImagem}`,
     }));
   } catch (error: any) {
     throw new Error(error.message || 'Erro ao conectar com o servidor');
@@ -105,26 +105,45 @@ export const getMovelByUser = async () => {
     const response = await fetch(`${API_URL}/moveis/usuario`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Erro ao buscar móvel');
+      const errorData = await response.json().catch(() => null);
+      throw new Error(errorData?.error || 'Erro ao buscar móveis do usuário');
     }
 
-    const data = await response.json();
+    const contentType = response.headers.get('Content-Type');
 
-    console.log('Resposta da API:', data);
+    if (contentType?.includes('application/json')) {
+      const data = await response.json();
 
-    return data.map((item: any) => ({
-      id: item.idMovel,
-      name: item.nome,
-      price: item.preco,
-      imgSrc: item.urlImagem,
-    }));
+      console.log('Resposta da API:', data);
+
+      data.map((item: any) => {
+        console.log(`${item.urlImagem}`)
+      })
+      return data.map((item: any) => ({
+        id: item.idMovel,
+        name: item.nome,
+        price: item.preco,
+        imgSrc: `${API_URL}/${item.urlImagem}`,
+      }));
+    } else if (contentType?.includes('image/') || contentType?.includes('application/octet-stream')) {
+      const blob = await response.blob();
+      const urlImagem = URL.createObjectURL(blob);
+      return [
+        {
+          id: null,
+          name: 'Imagem associada ao usuário',
+          price: null,
+          imgSrc: urlImagem,
+        },
+      ];
+    } else {
+      throw new Error('Formato de resposta não suportado');
+    }
   } catch (error: any) {
     throw new Error(error.message || 'Erro ao conectar com o servidor');
   }
@@ -153,20 +172,23 @@ export const getMovelById = async (id: number) => {
     }
 
     const data = await response.json();
+
+    const urlBaseImagens = `${API_URL}`;
     return {
       id: data.idMovel,
       nome: data.nome,
       preco: data.preco,
       estado: data.estado,
       descricao: data.descricao,
-      urlImagem: data.urlImagem,
+      urlImagem: `${urlBaseImagens}/${data.urlImagem}`,
     };
   } catch (error: any) {
     throw new Error(error.message || 'Erro ao conectar com o servidor');
   }
 };
 
-export const updateMovel = async (id: number, updatedData: any) => {
+
+export const updateMovel = async (id: number, updatedData: FormData) => {
   const token = getToken();
 
   if (!token) throw new Error('Usuário não autenticado');
@@ -175,10 +197,9 @@ export const updateMovel = async (id: number, updatedData: any) => {
     const response = await fetch(`${API_URL}/moveis/${id}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(updatedData),
+      body: updatedData,
     });
 
     if (!response.ok) {
@@ -192,7 +213,8 @@ export const updateMovel = async (id: number, updatedData: any) => {
   }
 };
 
-export const addMovel = async (movelData: any) => {
+
+export const addMovel = async (movelData: FormData) => {
   const token = getToken();
 
   if (!token) throw new Error('Usuário não autenticado');
@@ -201,10 +223,9 @@ export const addMovel = async (movelData: any) => {
     const response = await fetch(`${API_URL}/moveis`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(movelData),
+      body: movelData,
     });
 
     if (!response.ok) {

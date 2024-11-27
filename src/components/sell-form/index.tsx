@@ -8,9 +8,8 @@ function SellForm() {
     descricao: '',
     preco: '',
     estado: '',
-    urlImagem: '',
   });
-
+  const [imagem, setImagem] = useState<File | null>(null);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -19,10 +18,20 @@ function SellForm() {
     setForm({ ...form, [name]: value });
   };
 
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImagem(e.target.files[0]);
+    }
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    const formData = new FormData();
+    Object.entries(form).forEach(([key, value]) => formData.append(key, value));
+    if (imagem) formData.append('imagem', imagem);
+
     try {
-      await addMovel(form);
+      await addMovel(formData);
       alert('Móvel adicionado com sucesso!');
       navigate('/inventary');
     } catch (err: any) {
@@ -81,13 +90,13 @@ function SellForm() {
       </div>
 
       <div>
-        <label htmlFor="urlImagem">URL da Imagem:</label>
+        <label htmlFor="imagem">Imagem do Móvel:</label>
         <input
-          type="text"
-          id="urlImagem"
-          name="urlImagem"
-          value={form.urlImagem}
-          onChange={handleChange}
+          type="file"
+          id="imagem"
+          name="imagem"
+          accept="image/*"
+          onChange={handleImageChange}
           required
         />
       </div>

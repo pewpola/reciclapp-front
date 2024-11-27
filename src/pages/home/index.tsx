@@ -41,7 +41,7 @@ export default function Home() {
           <div className="componentes-grid">
             {moveis.length > 0 ? (
               moveis.map((movel) => (
-                <Link key={movel.id} to={`/detail/${movel.id}`}>
+                <Link key={movel.id} to={`/detail/${movel.id}`} className="product-card-link">
                   <ProductCard
                     name={movel.name}
                     price={`R$ ${parseFloat(movel.price).toFixed(2)}`}

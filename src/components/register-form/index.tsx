@@ -30,7 +30,6 @@ export default function RegisterForm() {
         }
 
         try {
-            // Usando o serviço de registro
             const token = await register({
                 nome: formData.nome,
                 email: formData.email,
@@ -42,7 +41,7 @@ export default function RegisterForm() {
             });
 
             if (token) {
-                navigate('/login'); // Redireciona para a página de login após o registro bem-sucedido
+                navigate('/login');
             }
         } catch (error: any) {
             setError(error.message || 'Erro ao cadastrar');
