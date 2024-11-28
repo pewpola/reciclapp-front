@@ -1,4 +1,3 @@
-import logo from '../../assets/logo.png';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -10,7 +9,6 @@ export default function Header() {
     return (
         <header>
             <div className="container d-flex justify-content-between align-items-center">
-                <img src={logo} alt="ReciclApp Logo" style={{ height: '50px' }} />
                 <h1>ReciclApp</h1>
                 <nav>
                     <ul>
